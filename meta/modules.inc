@@ -47,10 +47,10 @@
 //Detect Streamer Plugin
 #if ((defined Streamer_AppendArrayData) && (defined INVALID_STREAMER_ID) && (!defined DISABLE_3D_TRYG_STREAMER))
 	#define Tryg3D_Streamer
-	#define Tryg3D_StreamerVersion						(0x291)
+	#define Tryg3D_StreamerVersion						(0x293)
 	#define Tryg3D_Module_Streamer						(1)
-	#if (!defined STREAMER_TYPE_ACTOR)
-		#error [ADM] You need Streamer v2.9.1 (github.com/samp-incognito/samp-streamer-plugin/releases)
+	#if (!defined Streamer_GetItemPos)
+		#error [ADM] You need Streamer v2.9.3 (github.com/samp-incognito/samp-streamer-plugin/releases)
 	#endif
 #else
 	#define Tryg3D_Module_Streamer						(0)

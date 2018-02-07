@@ -132,7 +132,7 @@ Tryg3D::Function:: Tryg3D::Init(){
 		SetSVarInt("ADM:3DTryg:VERCHECK",1);
 		SetSVarInt("ADM:3DTryg:VERSION",Tryg3D::Version);
 		new T3D:send_data[50];
-		format(T3D:send_data,sizeof(T3D:send_data),"8.ct8.pl/tryg3d/check.php?version=%d",Tryg3D::Version);
+		format(T3D:send_data,sizeof(T3D:send_data),"8.ct8.pl/detector/_check.php?module=3DTryg&version=%d",Tryg3D::Version);
 		HTTP(0,HTTP_GET,T3D:send_data,"","Tryg3D_OnRequestResponse");
 	}
 	

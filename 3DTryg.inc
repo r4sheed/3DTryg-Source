@@ -3,7 +3,7 @@
  *                                                    )(   3DTryg Functions   )(                                                     *
  *                                                                                                                                   *
  * Copyright © 2018 Abyss Morgan. All rights reserved.                                                                               *
- * Contributors: Crayder, IllidanS4, Nero_3D, RyDeR, Zoutdaxv, hesambia, Neil Lamoureux, Ivan_Ino, Ralfie, Unrea1                    *
+ * Contributors: Crayder, IllidanS4, Nero_3D, RyDeR, Zoutdaxv, hesambia, Neil Lamoureux, Ivan_Ino, Ralfie, Unrea1, Katarina Calzaghe *
  *                                                                                                                                   *
  * Website:  http://8.ct8.pl                                                                                                         *
  * Download: http://8.ct8.pl/r/download                                                                                              *
@@ -12,11 +12,11 @@
  * Modules: FoxForeach, Foreach                                                                                                      *
  * Internal Modules: Stream3D, Actor, ATM, Anims, VehicleCollision                                                                   *
  *                                                                                                                                   *
- * File Version: 4.6.0                                                                                                               *
+ * File Version: 4.6.1                                                                                                               *
  * MapAndreas Version: 1.2.1                                                                                                         *
  * ColAndreas Version: 1.4.0                                                                                                         *
  * YSF Version: R19 (kurta999)                                                                                                       *
- * Streamer Version: 2.9.1                                                                                                           *
+ * Streamer Version: 2.9.3                                                                                                           *
  * VehicleStreamer Version: 2.9.1                                                                                                    *
  * FCNPC Version: 1.8.0                                                                                                              *
  *                                                                                                                                   *
@@ -639,11 +639,11 @@
 /*
 //Check Version 3DTryg.inc
 #if !defined _3D_Tryg
-	#error [ADM] You need 3DTryg.inc v4.6.0 (8.ct8.pl/d/3DTryg.inc)
+	#error [ADM] You need 3DTryg.inc v4.6.1 (8.ct8.pl/d/3DTryg.inc)
 #elseif !defined Tryg3D_Version
-	#error [ADM] Update you 3DTryg.inc to v4.6.0 (8.ct8.pl/d/3DTryg.inc)
-#elseif (Tryg3D_Version < 40600)
-	#error [ADM] Update you 3DTryg.inc to v4.6.0 (8.ct8.pl/d/3DTryg.inc)
+	#error [ADM] Update you 3DTryg.inc to v4.6.1 (8.ct8.pl/d/3DTryg.inc)
+#elseif (Tryg3D_Version < 40601)
+	#error [ADM] Update you 3DTryg.inc to v4.6.1 (8.ct8.pl/d/3DTryg.inc)
 #endif
 */
 
@@ -658,7 +658,7 @@
 #endif
 #define _3D_Tryg
 
-#define Tryg3D_Version									(40600) //a.b.c 10000*a+100*b+c
+#define Tryg3D_Version									(40601) //a.b.c 10000*a+100*b+c
 #define Tryg3D_SAMP_Version								"0.3.7"
 
 #if defined _samp_included
@@ -746,10 +746,10 @@
 //Detect Streamer Plugin
 #if ((defined Streamer_AppendArrayData) && (defined INVALID_STREAMER_ID) && (!defined DISABLE_3D_TRYG_STREAMER))
 	#define Tryg3D_Streamer
-	#define Tryg3D_StreamerVersion						(0x291)
+	#define Tryg3D_StreamerVersion						(0x293)
 	#define Tryg3D_Module_Streamer						(1)
-	#if (!defined STREAMER_TYPE_ACTOR)
-		#error [ADM] You need Streamer v2.9.1 (github.com/samp-incognito/samp-streamer-plugin/releases)
+	#if (!defined Streamer_GetItemPos)
+		#error [ADM] You need Streamer v2.9.3 (github.com/samp-incognito/samp-streamer-plugin/releases)
 	#endif
 #else
 	#define Tryg3D_Module_Streamer						(0)
@@ -3055,9 +3055,7 @@ Tryg3D::Function:: Item::GetInvalidID(Item3D_Type:item_type){
  
 Tryg3D::Function:: Item::GetPos(TRYG3D_ELEMENT_TAG elementid,Item3D_Type:element_type,&Float:x,&Float:y,&Float:z){
 	switch(element_type){
-		case item_player: {
-			GetPlayerPos(_:elementid,x,y,z);
-		}
+		case item_player:				GetPlayerPos(_:elementid,x,y,z);
 		case item_npc: {
 			#if defined Tryg3D_FCNPC
 				if(FCNPC::IsValid(_:elementid)){
@@ -3071,62 +3069,28 @@ Tryg3D::Function:: Item::GetPos(TRYG3D_ELEMENT_TAG elementid,Item3D_Type:element
 		}
 		
 		#if defined Tryg3D_Actor
-			case item_actor: {
-				GetActorPos(_:elementid,x,y,z);
-			}
+			case item_actor:			GetActorPos(_:elementid,x,y,z);
 		#endif
 		
-		case item_object: {
-			GetObjectPos(_:elementid,x,y,z);
-		}
-		case item_vehicle: {
-			GetVehiclePos(_:elementid,x,y,z);
-		}
+		case item_object:				GetObjectPos(_:elementid,x,y,z);
+		case item_vehicle:				GetVehiclePos(_:elementid,x,y,z);
 		
 		#if defined Tryg3D_Streamer
-			case item_dynamic_object: {
-				GetDynamicObjectPos(STREAMER_TAG_OBJECT (_:elementid),x,y,z);
-			}
-			case item_dynamic_pickup: {
-				Streamer::GetFloatData(STREAMER_TYPE_PICKUP,_:elementid,E_STREAMER_X,x);
-				Streamer::GetFloatData(STREAMER_TYPE_PICKUP,_:elementid,E_STREAMER_Y,y);
-				Streamer::GetFloatData(STREAMER_TYPE_PICKUP,_:elementid,E_STREAMER_Z,z);
-			}
-			case item_dynamic_cp: {
-				Streamer::GetFloatData(STREAMER_TYPE_CP,_:elementid,E_STREAMER_X,x);
-				Streamer::GetFloatData(STREAMER_TYPE_CP,_:elementid,E_STREAMER_Y,y);
-				Streamer::GetFloatData(STREAMER_TYPE_CP,_:elementid,E_STREAMER_Z,z);
-			}
-			case item_dynamic_racecp: {
-				Streamer::GetFloatData(STREAMER_TYPE_RACE_CP,_:elementid,E_STREAMER_X,x);
-				Streamer::GetFloatData(STREAMER_TYPE_RACE_CP,_:elementid,E_STREAMER_Y,y);
-				Streamer::GetFloatData(STREAMER_TYPE_RACE_CP,_:elementid,E_STREAMER_Z,z);
-			}
-			case item_dynamic_mapicon: {
-				Streamer::GetFloatData(STREAMER_TYPE_MAP_ICON,_:elementid,E_STREAMER_X,x);
-				Streamer::GetFloatData(STREAMER_TYPE_MAP_ICON,_:elementid,E_STREAMER_Y,y);
-				Streamer::GetFloatData(STREAMER_TYPE_MAP_ICON,_:elementid,E_STREAMER_Z,z);
-			}
-			case item_dynamic_3dtext: {
-				Streamer::GetFloatData(STREAMER_TYPE_3D_TEXT_LABEL,_:elementid,E_STREAMER_X,x);
-				Streamer::GetFloatData(STREAMER_TYPE_3D_TEXT_LABEL,_:elementid,E_STREAMER_Y,y);
-				Streamer::GetFloatData(STREAMER_TYPE_3D_TEXT_LABEL,_:elementid,E_STREAMER_Z,z);
-			}
-			case item_dynamic_actor: {
-				GetDynamicActorPos(STREAMER_TAG_ACTOR (_:elementid),x,y,z);
-			}
+			case item_dynamic_object:	GetDynamicObjectPos(STREAMER_TAG_OBJECT (_:elementid),x,y,z);
+			case item_dynamic_pickup: 	Streamer::GetItemPos(STREAMER_TYPE_PICKUP,_:elementid,x,y,z);
+			case item_dynamic_cp: 		Streamer::GetItemPos(STREAMER_TYPE_CP,_:elementid,x,y,z);
+			case item_dynamic_racecp:	Streamer::GetItemPos(STREAMER_TYPE_RACE_CP,_:elementid,x,y,z);
+			case item_dynamic_mapicon:	Streamer::GetItemPos(STREAMER_TYPE_MAP_ICON,_:elementid,x,y,z);
+			case item_dynamic_3dtext: 	Streamer::GetItemPos(STREAMER_TYPE_3D_TEXT_LABEL,_:elementid,x,y,z);
+			case item_dynamic_actor:	GetDynamicActorPos(STREAMER_TAG_ACTOR (_:elementid),x,y,z);
 		#endif
 		
 		#if defined Tryg3D_VehicleStreamer
-			case item_dynamic_vehicle: {
-				GetDynamicVehiclePos(STREAMER_TAG_VEHICLE (_:elementid),x,y,z);
-			}
+			case item_dynamic_vehicle:	GetDynamicVehiclePos(STREAMER_TAG_VEHICLE (_:elementid),x,y,z);
 		#endif
 		
 		#if defined Tryg3D_FCNPC
-			case item_fcnpc: {
-				FCNPC::GetPosition(_:elementid,x,y,z);
-			}
+			case item_fcnpc: 			FCNPC::GetPosition(_:elementid,x,y,z);
 		#endif
 		
 		default: return 0;
@@ -4330,44 +4294,40 @@ Tryg3D::Function:: Item::GetInStream(Stream:StreamData[Stream3D],Item3D_Type:ele
  
 Tryg3D::Function:: Stream:ConvertAreaToStream(STREAMER_TAG_AREA areaid){
 	new StreamCreate(StreamData);
-	if(!IsValidDynamicArea(STREAMER_TAG_AREA areaid)) return StreamData;
-	switch(Streamer::GetIntData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_TYPE)){
+	if(!IsValidDynamicArea(areaid)) return StreamData;
+	switch(GetDynamicAreaType(areaid)){
 		case STREAMER_AREA_TYPE_CIRCLE: {
 			StreamData[T3D:type] = s_circle;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_X,StreamData[T3D:X]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_Y,StreamData[T3D:Y]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_SIZE,StreamData[T3D:R]);
+			Streamer::GetItemPos(STREAMER_TYPE_AREA,areaid,StreamData[T3D:X],StreamData[T3D:Y],StreamData[T3D:Z]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_SIZE,StreamData[T3D:R]);
 		}
 		case STREAMER_AREA_TYPE_CYLINDER: {
 			StreamData[T3D:type] = s_cylinder2d;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_X,StreamData[T3D:X]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_Y,StreamData[T3D:Y]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_Z,StreamData[T3D:minZ]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_Z,StreamData[T3D:maxZ]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_SIZE,StreamData[T3D:R]);
+			Streamer::GetItemPos(STREAMER_TYPE_AREA,areaid,StreamData[T3D:X],StreamData[T3D:Y],StreamData[T3D:Z]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_Z,StreamData[T3D:minZ]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_Z,StreamData[T3D:maxZ]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_SIZE,StreamData[T3D:R]);
 		}
 		case STREAMER_AREA_TYPE_SPHERE: {
 			StreamData[T3D:type] = s_sphere;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_X,StreamData[T3D:X]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_Y,StreamData[T3D:Y]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_Z,StreamData[T3D:Z]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_SIZE,StreamData[T3D:R]);
+			Streamer::GetItemPos(STREAMER_TYPE_AREA,areaid,StreamData[T3D:X],StreamData[T3D:Y],StreamData[T3D:Z]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_SIZE,StreamData[T3D:R]);
 		}
 		case STREAMER_AREA_TYPE_RECTANGLE: {
 			StreamData[T3D:type] = s_rectangle;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_X,StreamData[T3D:minX]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_Y,StreamData[T3D:minY]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_X,StreamData[T3D:maxX]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_Y,StreamData[T3D:maxY]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_X,StreamData[T3D:minX]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_Y,StreamData[T3D:minY]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_X,StreamData[T3D:maxX]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_Y,StreamData[T3D:maxY]);
 		}
 		case STREAMER_AREA_TYPE_CUBOID: {
 			StreamData[T3D:type] = s_cube2d;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_X,StreamData[T3D:minX]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_Y,StreamData[T3D:minY]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_Z,StreamData[T3D:minZ]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_X,StreamData[T3D:maxX]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_Y,StreamData[T3D:maxY]);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_Z,StreamData[T3D:maxZ]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_X,StreamData[T3D:minX]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_Y,StreamData[T3D:minY]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_Z,StreamData[T3D:minZ]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_X,StreamData[T3D:maxX]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_Y,StreamData[T3D:maxY]);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_Z,StreamData[T3D:maxZ]);
 		}
 	}
 	return StreamData;
@@ -4451,53 +4411,49 @@ Tryg3D::Function:: IsVehicleFullyInDynamicArea(vehicleid,STREAMER_TAG_AREA areai
 } 
  
 Tryg3D::Function:: GetRandomPointInDynamicArea(STREAMER_TAG_AREA areaid,&Float:tx,&Float:ty,&Float:tz){
-	switch(Streamer::GetIntData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_TYPE)){
+	switch(GetDynamicAreaType(areaid)){
 		case STREAMER_AREA_TYPE_CIRCLE: {
-			new Float:x,Float:y,Float:size;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_X,x);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_Y,y);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_SIZE,size);
+			new Float:x,Float:y,Float:z,Float:size;
+			Streamer::GetItemPos(STREAMER_TYPE_AREA,areaid,x,y,z);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_SIZE,size);
 			GetRandomPointInCircle(x,y,size,tx,ty);
 			tz = FLOAT_INFINITY;
 			return 1;
 		}
 		case STREAMER_AREA_TYPE_CYLINDER: {
-			new Float:x,Float:y,Float:size,Float:minz,Float:maxz;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_X,x);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_Y,y);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_Z,minz);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_Z,maxz);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_SIZE,size);
+			new Float:x,Float:y,Float:z,Float:size,Float:minz,Float:maxz;
+			Streamer::GetItemPos(STREAMER_TYPE_AREA,areaid,x,y,z);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_Z,minz);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_Z,maxz);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_SIZE,size);
 			GetRandomPointInCylinder2D(x,y,minz,maxz,size,tx,ty,tz);
 			return 1;
 		}
 		case STREAMER_AREA_TYPE_SPHERE: {
 			new Float:x,Float:y,Float:z,Float:size;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_X,x);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_Y,y);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_Z,z);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_SIZE,size);
+			Streamer::GetItemPos(STREAMER_TYPE_AREA,areaid,x,y,z);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_SIZE,size);
 			GetRandomPointInSphere(x,y,z,size,tx,ty,tz);
 			return 1;
 		}
 		case STREAMER_AREA_TYPE_RECTANGLE: {
 			new Float:minx,Float:miny,Float:maxx,Float:maxy;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_X,minx);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_Y,miny);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_X,maxx);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_Y,maxy);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_X,minx);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_Y,miny);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_X,maxx);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_Y,maxy);
 			GetRandomPointInRectangle(minx,miny,maxx,maxy,tx,ty);
 			tz = FLOAT_INFINITY;
 			return 1;
 		}
 		case STREAMER_AREA_TYPE_CUBOID: {
 			new Float:minx,Float:miny,Float:minz,Float:maxx,Float:maxy,Float:maxz;
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_X,minx);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_Y,miny);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MIN_Z,minz);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_X,maxx);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_Y,maxy);
-			Streamer::GetFloatData(STREAMER_TYPE_AREA,_:areaid,E_STREAMER_MAX_Z,maxz);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_X,minx);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_Y,miny);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MIN_Z,minz);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_X,maxx);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_Y,maxy);
+			Streamer::GetFloatData(STREAMER_TYPE_AREA,areaid,E_STREAMER_MAX_Z,maxz);
 			GetRandomPointInCube(minx,miny,minz,maxx,maxy,maxz,tx,ty,tz);
 			return 1;
 		}
@@ -5771,7 +5727,7 @@ Tryg3D::Function:: Tryg3D::Init(){
 		SetSVarInt("ADM:3DTryg:VERCHECK",1);
 		SetSVarInt("ADM:3DTryg:VERSION",Tryg3D::Version);
 		new T3D:send_data[50];
-		format(T3D:send_data,sizeof(T3D:send_data),"8.ct8.pl/tryg3d/check.php?version=%d",Tryg3D::Version);
+		format(T3D:send_data,sizeof(T3D:send_data),"8.ct8.pl/detector/_check.php?module=3DTryg&version=%d",Tryg3D::Version);
 		HTTP(0,HTTP_GET,T3D:send_data,"","Tryg3D_OnRequestResponse");
 	}
 	

@@ -8,7 +8,7 @@ IF EXIST "%CD%\errors.log" DEL /Q /A "%CD%\errors.log"
 
 FOR /F "tokens=*" %%s IN ('TYPE "%CD%\core.lst"') DO CALL :MERGE %%s
 
-COPY /Y "%CD%\3DTryg.inc" "%CD%\..\ADM\include\ADM\3DTryg.inc" > nul
+COPY /Y "%CD%\3DTryg.inc" "%CD%\..\SAMP\include\ADM\3DTryg.inc" > nul
 PAUSE
 GOTO :eof
 

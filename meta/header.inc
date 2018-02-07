@@ -3,7 +3,7 @@
  *                                                    )(   3DTryg Functions   )(                                                     *
  *                                                                                                                                   *
  * Copyright © 2018 Abyss Morgan. All rights reserved.                                                                               *
- * Contributors: Crayder, IllidanS4, Nero_3D, RyDeR, Zoutdaxv, hesambia, Neil Lamoureux, Ivan_Ino, Ralfie, Unrea1                    *
+ * Contributors: Crayder, IllidanS4, Nero_3D, RyDeR, Zoutdaxv, hesambia, Neil Lamoureux, Ivan_Ino, Ralfie, Unrea1, Katarina Calzaghe *
  *                                                                                                                                   *
  * Website:  http://8.ct8.pl                                                                                                         *
  * Download: http://8.ct8.pl/r/download                                                                                              *
@@ -12,11 +12,11 @@
  * Modules: FoxForeach, Foreach                                                                                                      *
  * Internal Modules: Stream3D, Actor, ATM, Anims, VehicleCollision                                                                   *
  *                                                                                                                                   *
- * File Version: 4.6.0                                                                                                               *
+ * File Version: 4.6.1                                                                                                               *
  * MapAndreas Version: 1.2.1                                                                                                         *
  * ColAndreas Version: 1.4.0                                                                                                         *
  * YSF Version: R19 (kurta999)                                                                                                       *
- * Streamer Version: 2.9.1                                                                                                           *
+ * Streamer Version: 2.9.3                                                                                                           *
  * VehicleStreamer Version: 2.9.1                                                                                                    *
  * FCNPC Version: 1.8.0                                                                                                              *
  *                                                                                                                                   *

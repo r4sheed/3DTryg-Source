@@ -1,11 +1,11 @@
 /*
 //Check Version 3DTryg.inc
 #if !defined _3D_Tryg
-	#error [ADM] You need 3DTryg.inc v4.6.0 (8.ct8.pl/d/3DTryg.inc)
+	#error [ADM] You need 3DTryg.inc v4.6.1 (8.ct8.pl/d/3DTryg.inc)
 #elseif !defined Tryg3D_Version
-	#error [ADM] Update you 3DTryg.inc to v4.6.0 (8.ct8.pl/d/3DTryg.inc)
-#elseif (Tryg3D_Version < 40600)
-	#error [ADM] Update you 3DTryg.inc to v4.6.0 (8.ct8.pl/d/3DTryg.inc)
+	#error [ADM] Update you 3DTryg.inc to v4.6.1 (8.ct8.pl/d/3DTryg.inc)
+#elseif (Tryg3D_Version < 40601)
+	#error [ADM] Update you 3DTryg.inc to v4.6.1 (8.ct8.pl/d/3DTryg.inc)
 #endif
 */
 
@@ -20,7 +20,7 @@
 #endif
 #define _3D_Tryg
 
-#define Tryg3D_Version									(40600) //a.b.c 10000*a+100*b+c
+#define Tryg3D_Version									(40601) //a.b.c 10000*a+100*b+c
 #define Tryg3D_SAMP_Version								"0.3.7"
 
 #if defined _samp_included
